@@ -49,6 +49,12 @@ const THIRD_ORDERS = [
     ' decillion'
 ];
 
+const FRACTIONAL_PREFIXES = [
+    '',
+    'ten',
+    'hundred'
+];
+
 function onLoad(): void {
     let numeral_input = document.getElementById('numeral');
 
@@ -77,6 +83,11 @@ function numeralChange(this: HTMLInputElement, ev: Event): void {
     }
 
     let decimals = decimalPortion(numeral);
+
+    if (decimals == null) {
+        setEnglish('Invalid numeral');
+        return;
+    }
 
     if (decimals !== '') {
         if (integers === 'zero') {
@@ -136,35 +147,7 @@ function integerPortion(numeral: string): string | null {
         return 'zero';
     }
 
-    if (integers.length > 36) {
-        return null;
-    }
-
-    let thirdOrder = Math.floor(integers.length / 3);
-    let remainder = integers.length % 3;
-    let engl = '';
-
-    if (remainder !== 0) {
-        engl += convertRemainder(integers.slice(0, remainder));
-        engl += THIRD_ORDERS[thirdOrder];
-    }
-
-    for (let i = 0; i < thirdOrder; ++i) {
-        let start = remainder + i * 3;
-
-        let group = convertGroup(
-            integers.slice(start, start + 3),
-            thirdOrder - i - 1
-        );
-
-        if (engl !== '' && group !== '') {
-            engl += ' ';
-        }
-
-        engl += group;
-    }
-
-    return engl;
+    return convertDigits(integers);
 }
 
 function convertGroup(group: string, thirdOrder: number): string {
@@ -223,6 +206,97 @@ function removeExtraLeadingZeros(integers: string): string {
     return '0';
 }
 
-function decimalPortion(numeral: string): string {
-    return "";
+function decimalPortion(numeral: string): string | null {
+    let decimal = numeral.indexOf('.');
+
+    if (decimal === -1) {
+        return '';
+    }
+
+    let start = decimal + 1;
+
+    // set start to the first non-zero digit after the decimal point
+    for (; start < numeral.length; ++start) {
+        let num = parseInt(numeral[start]);
+
+        if (isNaN(num)) {
+            return '';
+        }
+
+        if (num !== 0) {
+            let end = start + 1;
+            
+            for (let i = end; i < numeral.length; ++i) {
+                num = parseInt(numeral[i]);
+
+                if (isNaN(num)) {
+                    break;
+                }
+
+                if (num !== 0) {
+                    end = i + 1;
+                }
+            }
+
+            return convertDecimalDigits(
+                numeral.slice(start, end),
+                end - decimal - 1
+            );
+        }
+    }
+
+    return '';
+}
+
+function convertDigits(digits: string): string | null {
+    if (digits.length > 36) {
+        return null;
+    }
+
+    let thirdOrder = Math.floor(digits.length / 3);
+    let remainder = digits.length % 3;
+    let engl = '';
+
+    if (remainder !== 0) {
+        engl += convertRemainder(digits.slice(0, remainder));
+        engl += THIRD_ORDERS[thirdOrder];
+    }
+
+    for (let i = 0; i < thirdOrder; ++i) {
+        let start = remainder + i * 3;
+
+        let group = convertGroup(
+            digits.slice(start, start + 3),
+            thirdOrder - i - 1
+        );
+
+        if (engl !== '' && group !== '') {
+            engl += ' ';
+        }
+
+        engl += group;
+    }
+
+    return engl;
+}
+
+function convertFractionPlace(place: number): string {
+    return FRACTIONAL_PREFIXES[place % 3] +
+        THIRD_ORDERS[Math.floor(place / 3)] + 'th';
+}
+
+function convertDecimalDigits(digits: string, place: number): string | null {
+    let engl = convertDigits(digits);
+    
+    if (engl == null) {
+        return null;
+    }
+
+    engl += ' ' + convertFractionPlace(place);
+
+    if (digits.length !== 1 || digits[0] !== '1') {
+        engl += 's';
+    }
+
+    return engl;
 }
