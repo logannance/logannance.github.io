@@ -1,0 +1,23 @@
+
+
+.formatButtons {
+    display: flex;
+    justify-content: center;
+    background-color: gainsboro;
+
+    a {
+        margin: 0 0.5vw 0 0.5vw;
+        padding: 0.5vw 1vw 0.5vw 1vw;
+        font-size: 16pt;
+        cursor: pointer;
+
+        &:hover {
+            background-color: green;
+        }
+    }
+}
+
+.selectedFormat {
+    background-color: goldenrod;
+}
+
