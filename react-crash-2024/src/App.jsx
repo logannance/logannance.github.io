@@ -11,8 +11,7 @@ import JobsPage from './pages/JobsPage'
 import NotFoundPage from './pages/NotFoundPage'
 import JobPage, { jobLoader } from './pages/JobPage'
 import AddJobPage from './pages/AddJobPage'
-
-const base = '/react-crash-2024/dist/';
+import base from './constants';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
