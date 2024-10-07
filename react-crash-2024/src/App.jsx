@@ -12,13 +12,15 @@ import NotFoundPage from './pages/NotFoundPage'
 import JobPage, { jobLoader } from './pages/JobPage'
 import AddJobPage from './pages/AddJobPage'
 
+const base = '/react-crash-2024/dist/';
+
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path='/' element={<MainLayout />}>
+    <Route path={base + '/'} element={<MainLayout />}>
       <Route index element={<HomePage />} />
-      <Route path='/jobs' element={<JobsPage />} />
-      <Route path='/jobs/:id' element={<JobPage />} loader={jobLoader} />
-      <Route path='/add-job' element={<AddJobPage />} />
+      <Route path={base + '/jobs'} element={<JobsPage />} />
+      <Route path={base + '/jobs/:id'} element={<JobPage />} loader={jobLoader} />
+      <Route path={base + '/add-job'} element={<AddJobPage />} />
       <Route path='*' element={<NotFoundPage />} />
       
     </Route>

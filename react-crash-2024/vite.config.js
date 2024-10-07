@@ -9,7 +9,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'https://loen10.github.io/react-crash-2024/dist',
+        target: 'https://loen10.github.io/react-crash-2024/src',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }
