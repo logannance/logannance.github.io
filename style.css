@@ -1,0 +1,76 @@
+body {
+    background-color: whitesmoke;
+    margin: 1rem;
+    font-family: 'Montserrat';
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 2rem;
+  }
+
+  h1, h2 {
+    font-family: 'Rubik';
+    font-weight: bold;
+    font-size: 4rem;
+    margin: 0;
+  }
+
+  h2 {
+    font-size: 2rem;
+    border-bottom: 4px solid;
+  }
+
+  span {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+
+  ul {
+    margin: 0;
+  }
+
+  .contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+
+  .text-m, p {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+
+  .text-s, a {
+    font-size: 1rem;
+  }
+
+  .text-ss {
+    font-size: 0.75rem;
+  }
+
+  .vertical-section {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap: 2rem;
+  }
+
+  .subinfo {
+    margin-top: 0.5rem;
+  }
+
+  .blue {
+    color: blue;
+  }
+
+  .bold {
+    font-weight: bold;
+  }
