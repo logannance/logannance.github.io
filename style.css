@@ -1,76 +1,63 @@
 body {
-    background-color: whitesmoke;
-    margin: 1rem;
     font-family: 'Montserrat';
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    gap: 2rem;
-  }
+    font-size: small;
+}
 
-  h1, h2 {
+h1, h2 {
     font-family: 'Rubik';
     font-weight: bold;
-    font-size: 4rem;
-    margin: 0;
-  }
+    /* margin: 0; */
+}
 
-  h2 {
-    font-size: 2rem;
+h2 {
     border-bottom: 4px solid;
-  }
+}
 
-  span {
+ul {
     margin: 0;
-    font-size: 1.5rem;
-  }
+}
 
-  ul {
-    margin: 0;
-  }
-
-  .contact {
+.contact {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
     align-items: center;
-  }
+}
 
-  .info {
+.info {
     display: flex;
     flex-wrap: wrap;
-    gap: 2rem;
-  }
+    gap: 1rem;
+    justify-content: space-between;
+}
 
-  .text-m, p {
+.text-m, p {
     margin: 0;
-    font-size: 1.5rem;
-  }
+}
 
-  .text-s, a {
-    font-size: 1rem;
-  }
+.text-s, a {
+font-size: 1rem;
+}
 
-  .text-ss {
-    font-size: 0.75rem;
-  }
+.text-ss {
+font-size: 0.75rem;
+}
 
-  .vertical-section {
-    margin-top: 1rem;
+.vertical-section {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    gap: 2rem;
-  }
+    gap: 1rem;
+}
 
-  .subinfo {
-    margin-top: 0.5rem;
-  }
+.subinfo {
+margin-top: 0.5rem;
+}
 
-  .blue {
-    color: blue;
-  }
+.blue {
+color: blue;
+}
 
-  .bold {
-    font-weight: bold;
-  }
+.bold {
+font-weight: bold;
+}
