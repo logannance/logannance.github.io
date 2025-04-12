@@ -10,8 +10,8 @@ const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
   subsets: ['latin'],
   display: 'swap',
-  preload: true,
-  adjustFontFallback: true
+  // preload: true,
+  // adjustFontFallback: true
 })
 
 export const metadata: Metadata = {
