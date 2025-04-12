@@ -26,12 +26,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={roboto.className}>
-      <head>
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
-        />
-      </head>
       <body>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
