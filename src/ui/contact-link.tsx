@@ -1,4 +1,4 @@
-import { Grid, Link, Typography } from '@mui/material';
+import { Link } from '@mui/material';
 import IconText from './icon-text';
 
 interface ContactLinkProps {
