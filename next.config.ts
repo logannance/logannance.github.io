@@ -1,10 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  output: process.env.NODE_ENV === 'production' ? 'export' : undefined,
   images: {
     unoptimized: true,
   },
-  basePath: '/logannance.github.io',
+  basePath: process.env.NODE_ENV === 'production' ? '/logannance.github.io' : '',
+  compiler: {
+    emotion: true
+  }
 }
 
 export default nextConfig

@@ -13,7 +13,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'var(--font-geist-sans)',
+    fontFamily: 'var(--font-roboto)',
   },
   components: {
     MuiButton: {
