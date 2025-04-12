@@ -1,4 +1,3 @@
-import { Typography } from "@mui/material"
 import Grid from "@mui/material/Grid";
 import ContactLink from "./contact-link";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -10,8 +9,7 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 
 export default function ContactHeader() {
     return (
-      <Grid container alignItems="baseline" gap={2}>
-        <Typography variant="h2">Logan Nance</Typography>
+      <Grid container alignItems="baseline" spacing={2} justifyContent="space-between">
         <ContactLink href="/resume.pdf" icon={<DownloadIcon fontSize="small" />} text="Resume" download="logan-nance-resume.pdf" />
         <ContactLink href="mailto:ldnance10@gmail.com" icon={<EmailIcon fontSize="small" />} text="ldnance10@gmail.com" />
         <ContactLink href="tel:385-306-1087" icon={<PhoneIcon fontSize="small" />} text="385-306-1087" />

@@ -51,7 +51,7 @@ export default function Resume() {
         />
         </ResumeSection>
       </Grid>
-      <Grid size={{xs: 12, md: 6, lg: 4}}>
+      <Grid size={{xs: 12, sm: 6, md: 4}}>
         <ResumeSection title="Work Experience">
           <ResumeSectionItem
             title="Parks Maintenance Worker"
@@ -92,7 +92,7 @@ export default function Resume() {
           />
         </ResumeSection>
       </Grid>
-      <Grid size={{xs: 12, md: 6, lg: 4}}>
+      <Grid size={{xs: 12, sm: 6, md: 4}}>
         <ResumeSection title="Projects">
           <ResumeSectionItem
             title="Software Requirement Specification"
