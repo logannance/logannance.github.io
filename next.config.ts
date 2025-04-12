@@ -5,6 +5,7 @@ const nextConfig = {
     unoptimized: true,
   },
   basePath: process.env.NODE_ENV === 'production' ? '/logannance.github.io' : '',
+  trailingSlash: true,
 }
 
 export default nextConfig
