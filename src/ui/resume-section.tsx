@@ -1,4 +1,4 @@
-import { Typography, Card, CardHeader, List, ListItem, ListItemText, Link, Box } from "@mui/material";
+import { Typography, Card, CardHeader, List } from "@mui/material";
 
 export default function ResumeSection({ title, children }:
   { title: string, children: React.ReactNode }

@@ -1,7 +1,3 @@
-import { List, ListItemText, ListItem } from "@mui/material";
-
-import { Card, CardHeader, Typography, Link } from "@mui/material";
-
 import { Grid } from "@mui/material";
 import IconText from "./icon-text";
 import SchoolIcon from "@mui/icons-material/School";

@@ -1,4 +1,4 @@
-import { Link, List, Typography } from "@mui/material";
+import { Link, Typography } from "@mui/material";
 import { ListItem } from "@mui/material";
 import { ListItemText } from "@mui/material";
 import React from "react";
