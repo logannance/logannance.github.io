@@ -113,7 +113,7 @@ export default function Resume() {
             organization="Personal"
             organizationHref="https://github.com/logannance/logannance.github.io"
             date="April 2025 - Current"
-            descriptions={["React", "Typescript", "MUI", "Next.js", "Cursor"]}
+            descriptions={["GitHub Actions Automated Deployment", "React", "Typescript", "MUI", "Next.js", "Cursor"]}
           />
         </ResumeSection>
       </Grid>
