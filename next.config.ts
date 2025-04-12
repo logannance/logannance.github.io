@@ -5,10 +5,6 @@ const nextConfig = {
     unoptimized: true,
   },
   basePath: process.env.NODE_ENV === 'production' ? '/logannance.github.io' : '',
-  compiler: {
-    emotion: true
-  },
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/logannance.github.io' : ''
 }
 
 export default nextConfig
