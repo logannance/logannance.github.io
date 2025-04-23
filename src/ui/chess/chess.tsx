@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Grid } from "@mui/material";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useState } from "react";
 
 const SquareColor = {
   Light: '#ebecd0',
@@ -59,9 +59,9 @@ type Square = {
 
 type Board = Square[][];
 
-function isWhite(piece: Piece) {
-  return piece.char < 9818;
-}
+// function isWhite(piece: Piece) {
+//   return piece.char < 9818;
+// }
 
 export default function Chess() {
   const [board, setBoard] = useState<Board>([
