@@ -1,6 +1,7 @@
+// import Board from "@/ui/chess/board";
+import Chess from "@/ui/chess/chess";
 
-
-export default function Chess() {
-  return <div>Chess</div>;
+export default function Page() {
+  // return <Board />;
+  return <Chess />;
 }
-
