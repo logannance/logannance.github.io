@@ -2,52 +2,10 @@
 
 import { Box, Grid } from "@mui/material";
 import { useState } from "react";
-import { Piece } from "./piece";
-
-const SquareColor = {
-  Light: '#ebecd0',
-  Dark: '#779556',
-} as const; type SquareColor = typeof SquareColor[keyof typeof SquareColor];
-
-type Vec = {
-  x: number,
-  y: number
-}
-
-type Square = {
-  color: SquareColor,
-  decoration?: 'dot' | 'circle',
-  piece?: Piece
-}
-
-type Board = Square[][];
-
-// function isWhite(piece: Piece) {
-//   return piece.char < 9818;
-// }
+import { Board, Square, starting, Vec } from "./board";
 
 export default function Chess() {
-  const [board, setBoard] = useState<Board>([
-    [
-      {
-        color: SquareColor.Light,
-        piece: Piece.WhiteKing,
-      },
-      {
-        color: SquareColor.Dark,
-        piece: Piece.WhiteQueen,
-      },
-      ...Array.from({ length: 6 }, (_, i) => ({
-        color: i % 2 === 0 ? SquareColor.Light : SquareColor.Dark,
-      }))
-    ],
-    
-    ...Array.from( {length: 7 }, (_, i) => (
-      Array.from({ length: 8 }, (_, j) => ({
-        color: (i + j) % 2 === 1 ? SquareColor.Light : SquareColor.Dark,
-      }))
-    ))
-  ]);
+  const [board, setBoard] = useState<Board>(starting);
 
   const [active, setActive] = useState<
     { sqr: Square } & Vec | null
@@ -55,111 +13,112 @@ export default function Chess() {
 
   return (
     <Grid container justifyContent="center">
-      <Box>
-        {board.map((row, i) => (
-          <Grid key={i} container flexWrap="nowrap">
-            {row.map((square, j) => (
-              <Grid
-                key={j}
-                container
-                justifyContent="center"
-                alignItems="center"
-                width="4rem"
-                height="4rem"
-                fontSize="3rem"
+      <Grid container>
+        <Box>
+          {board.map((row, i) => (
+            <Grid key={i} container flexWrap="nowrap">
+              {row.map((square, j) => (
+                <Grid
+                  key={j}
+                  container
+                  justifyContent="center"
+                  alignItems="center"
+                  width="4rem"
+                  height="4rem"
+                  fontSize="3rem"
 
-                sx={{
-                  userSelect: 'none',
-                  backgroundColor: square.color,
-                  ':hover': square.piece && {
-                    fontSize: '4rem',
-                    cursor: 'pointer',
-                  }
-                }}
+                  sx={{
+                    userSelect: 'none',
+                    backgroundColor: square.color,
+                    ':hover': square.piece && {
+                      fontSize: '4rem',
+                      cursor: 'pointer',
+                    }
+                  }}
 
-                onClick={() => {
-                  const decorate = (
-                    vecSqr: { sqr: Square } & Vec,
-                    remove?: true
-                  ) => {
-                    vecSqr.sqr.piece!.moves.forEach(move => {
-                      for (const m of move()) {
-                        const x = vecSqr.x + m.x;
-                        const y = vecSqr.y + m.y;
-                  
-                        if (x < 0 || y < 0 || x > 7 || y > 7) {
-                          return;
+                  onClick={() => {
+                    const decorate = (
+                      vecSqr: { sqr: Square } & Vec,
+                      remove?: true
+                    ) => {
+                      vecSqr.sqr.piece!.moves.forEach(move => {
+                        for (const m of move()) {
+                          const x = vecSqr.x + m.x;
+                          const y = vecSqr.y + m.y;
+                    
+                          if (x < 0 || y < 0 || x > 7 || y > 7) {
+                            return;
+                          }
+                    
+                          const dest = board[y][x];
+
+                          if (dest.piece) {
+                            dest.decoration = remove ? undefined : 'circle';
+                            return;
+                          }
+
+                          dest.decoration = remove ? undefined: 'dot';
                         }
-                  
-                        const dest = board[y][x];
-                        
-                        if (remove) {
-                          dest.decoration = undefined;
-                        } else {
-                          dest.decoration = dest.piece ? 'circle' : 'dot';
-                        }
-                      }
+                      });
 
                       setBoard([...board]);
-                    });
-                  };
+                    };
 
-                  const capture = (active: { sqr: Square } & Vec) => {
-                    console.log('yo');
-                    square.decoration = undefined;
-                    square.piece = active.sqr.piece;
-                    decorate(active, true);
-                    active.sqr.piece = undefined;
-                    setActive(null);
-                  }
+                    const capture = (active: { sqr: Square } & Vec) => {
+                      console.log('yo');
+                      decorate(active, true);
+                      square.decoration = undefined;
+                      square.piece = active.sqr.piece;
+                      active.sqr.piece = undefined;
+                      setActive(null);
+                    }
 
-                  if (square.piece) {
-                    // if the square has a piece and a decoration,
-                    // it is a circle
-                    if (square.decoration) {
-                      capture(active!);
+                    if (square.piece) {
+                      // if the square has a piece and a decoration,
+                      // it is a circle
+                      if (square.decoration) {
+                        capture(active!);
+                        return;
+                      }
+                      
+                      if (active) return;
+                      setActive({ sqr: square, x: j, y: i });
+                      decorate({ sqr: square, x: j, y: i });
                       return;
                     }
-                  
-                    setActive({ sqr: square, x: j, y: i });
-                    decorate({ sqr: square, x: j, y: i });
-                    return;
-                  }
-              
-                  // If clicked on square with no piece and no decoration, an
-                  // empty square was clicked and nothing should be done
-                  if (!square.decoration) {
-                    return;
-                  }
-                  
-                  // no piece, yes decoration
-                  capture(active!);
-                }}
-              >
-                {square.decoration === 'dot' ? (
-                  <Box
-                    width="1rem"
-                    height="1rem"
-                    borderRadius="100%"
-                    sx={{ backgroundColor: 'black', opacity: '50%' }}
-                  />
-                ) : square.decoration === 'circle' && (
-                  <Box
-                    width="3rem"
-                    height="3rem"
-                    border={4}
-                    borderRadius="100%"
-                    borderColor='#00000088'
-                  />
-                )}
-                <Box position="absolute">
-                  {square.piece && String.fromCharCode(square.piece.char)}
-                </Box>
-              </Grid>
-            ))}
-          </Grid>
-        ))}
-      </Box>
+                
+                    // If clicked on square with no piece and no decoration, an
+                    // empty square was clicked and nothing should be done
+                    if (!square.decoration) return;
+                    // no piece, yes decoration
+                    capture(active!);
+                  }}
+                >
+                  {square.decoration === 'dot' ? (
+                    <Box
+                      width="1rem"
+                      height="1rem"
+                      borderRadius="100%"
+                      sx={{ backgroundColor: 'black', opacity: '50%' }}
+                    />
+                  ) : square.decoration === 'circle' && (
+                    <Box
+                      width="3rem"
+                      height="3rem"
+                      border={4}
+                      borderRadius="100%"
+                      borderColor='#00000088'
+                    />
+                  )}
+                  <Box position="absolute">
+                    {square.piece && String.fromCharCode(square.piece.char)}
+                  </Box>
+                </Grid>
+              ))}
+            </Grid>
+          ))}
+        </Box>
+      </Grid>
     </Grid>
   )
 }

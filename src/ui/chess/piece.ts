@@ -54,53 +54,71 @@ export const Piece = {
   WhiteQueen: {
     char: 9813,
     moves: [
-      function* upSlide() {
-        for (let y = -1; y > -8; --y) {
-          yield { x: 0, y: y };
-        }
-      },
-
-      function* upRightSlide() {
-        for (let vec = { x: 1, y: -1 }; vec.x < 8; ++vec.x, --vec.y) {
-          yield vec;
-        }
-      },
-
-      function* rightSlide() {
-        for (let x = 1; x < 8; ++x) {
-          yield { x: x, y: 0 };
-        }
-      },
-
-      function* downRightSlide() {
-        for (let vec = { x: 1, y: 1 }; vec.x < 8; ++vec.x, ++vec.y) {
-          yield vec;
-        }
-      },
-
-      function* downSlide() {
-        for (let y = 1; y < 8; ++y) {
-          yield { x: 0, y: y };
-        }
-      },
-
-      function* downLeftSlide() {
-        for (let vec = { x: -1, y: 1 }; vec.y < 8; --vec.x, ++vec.y) {
-          yield vec;
-        }
-      },
-
-      function* leftSlide() {
-        for (let x = -1; x > -8; --x) {
-          yield { x: x, y: 0 };
-        }
-      },
-
-      function* upLeftSlide() {
-        for (let vec = { x: -1, y: -1 }; vec.x > -8; --vec.x, --vec.y) {
-          yield vec;
-        }
-      },
+      upSlide,
+      upRightSlide,
+      rightSlide,
+      downRightSlide,
+      downSlide,
+      downLeftSlide,
+      leftSlide,
+      upLeftSlide,
+    ]
+  },
+  WhiteRook: {
+    char: 9814,
+    moves: [
+      upSlide,
+      rightSlide,
+      downSlide,
+      leftSlide
     ]
   }
 } as const; export type Piece = typeof Piece[keyof typeof Piece];
+
+function* upSlide() {
+  for (let y = -1; y > -8; --y) {
+    yield { x: 0, y: y };
+  }
+}
+
+function* upRightSlide() {
+  for (let vec = { x: 1, y: -1 }; vec.x < 8; ++vec.x, --vec.y) {
+    yield vec;
+  }
+}
+
+function* rightSlide() {
+  for (let x = 1; x < 8; ++x) {
+    yield { x: x, y: 0 };
+  }
+}
+
+function* downRightSlide() {
+  for (let vec = { x: 1, y: 1 }; vec.x < 8; ++vec.x, ++vec.y) {
+    yield vec;
+  }
+}
+
+function* downSlide() {
+  for (let y = 1; y < 8; ++y) {
+    yield { x: 0, y: y };
+  }
+}
+
+function* downLeftSlide() {
+  for (let vec = { x: -1, y: 1 }; vec.y < 8; --vec.x, ++vec.y) {
+    yield vec;
+  }
+}
+
+function* leftSlide() {
+  for (let x = -1; x > -8; --x) {
+    yield { x: x, y: 0 };
+  }
+}
+
+function* upLeftSlide() {
+  for (let vec = { x: -1, y: -1 }; vec.x > -8; --vec.x, --vec.y) {
+    yield vec;
+  }
+}
