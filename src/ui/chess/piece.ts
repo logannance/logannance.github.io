@@ -1,3 +1,5 @@
+import { Board, Vec } from "./board";
+
 export const PieceChar = {
   WhiteKing: 9812,
   WhiteQueen: 9813,
@@ -13,112 +15,261 @@ export const PieceChar = {
   BlackPawn: 9823,
 } as const; export type PieceChar = typeof PieceChar[keyof typeof PieceChar];
 
-export const Piece = {
-  WhiteKing: {
-    char: 9812,
-    moves: [
-      function* upOne() {
-        yield { x: 0, y: -1 };
-      },
+type Move = (start: Vec, board: Board, piece: Piece) => Generator<void>;
 
-      function* upRightOne() {
-        yield { x: 1, y: -1 };
-      },
+function normalMove(vec: Vec) {
+  return function*(start: Vec, board: Board) {
+    const dest = start.add(vec);
+    if (!dest.inBounds()) return;
+    const destSqr = board.getSquareAtVec(dest);
+    destSqr.decoration = board.active ?
+      destSqr.piece ? 'circle' : 'dot' :
+      undefined;
 
-      function* rightOne() {
-        yield { x: 1, y: 0 };
-      },
+    yield;
+  }
+}
 
-      function* downRightOne() {
-        yield { x: 1, y: 1 };
-      },
+function slideMove(vec: Vec) {
+  return function*(start: Vec, board: Board) {
+    for (let i = 1; i < 8; ++i) {
+      const slideVec = new Vec(vec.x * i, vec.y * i);
+      const dest = start.add(slideVec);
+      if (!dest.inBounds()) return;
+      const destSqr = board.getSquareAtVec(dest);
 
-      function* downOne() {
-        yield { x: 0, y: 1 };
-      },
-
-      function* downLeftOne() {
-        yield { x: -1, y: 1 };
-      },
-
-      function* leftOne() {
-        yield { x: -1, y: 0 };
-      },
-
-      function* upLeftOne() {
-        yield { x: -1, y: -1 };
+      if (destSqr.piece) {
+        destSqr.decoration = board.active ? 'circle' : undefined;
+        return;
       }
-    ]
-  },
 
-  WhiteQueen: {
-    char: 9813,
-    moves: [
-      upSlide,
-      upRightSlide,
-      rightSlide,
-      downRightSlide,
-      downSlide,
-      downLeftSlide,
-      leftSlide,
-      upLeftSlide,
-    ]
-  },
-  WhiteRook: {
-    char: 9814,
-    moves: [
-      upSlide,
-      rightSlide,
-      downSlide,
-      leftSlide
-    ]
-  }
-} as const; export type Piece = typeof Piece[keyof typeof Piece];
-
-function* upSlide() {
-  for (let y = -1; y > -8; --y) {
-    yield { x: 0, y: y };
+      destSqr.decoration = board.active ? 'dot' : undefined;
+      yield;
+    }
   }
 }
 
-function* upRightSlide() {
-  for (let vec = { x: 1, y: -1 }; vec.x < 8; ++vec.x, --vec.y) {
-    yield vec;
+function pieceMove(vec: Vec) {
+  return function*(start: Vec, board: Board) {
+    const dest = start.add(vec);
+    if (!dest.inBounds()) return;
+    const destSqr = board.getSquareAtVec(dest);
+
+    if (destSqr.piece) {
+      destSqr.decoration = board.active ? 'circle' : undefined;
+      yield;
+    }
   }
 }
 
-function* rightSlide() {
-  for (let x = 1; x < 8; ++x) {
-    yield { x: x, y: 0 };
+export abstract class Piece {
+  private _char: PieceChar;
+  private _moved: boolean;
+  protected _moves: Move[];
+
+  constructor (char: PieceChar, moves: Move[]) {
+    this._char = char;
+    this._moved = false;
+    this._moves = moves;
+  }
+
+  get char() {
+    return this._char;
+  }
+
+  get moved() {
+    return this._moved;
+  }
+
+  move() {
+    this._moved = true;
+  }
+
+  processMoves(start: Vec, board: Board) {
+    this._moves.forEach(move => move(start, board, this).forEach(() => {}));
+  }
+
+  sameColor(other: Piece) {
+    return (this.char < 9817 && other.char < 9817) ||
+      (this.char > 9817 && other.char > 9817);
   }
 }
 
-function* downRightSlide() {
-  for (let vec = { x: 1, y: 1 }; vec.x < 8; ++vec.x, ++vec.y) {
-    yield vec;
+export class WhiteKing extends Piece {
+  constructor() {
+    super(PieceChar.WhiteKing, [
+      normalMove(new Vec(0, -1)),
+      normalMove(new Vec(1, -1)),
+      normalMove(new Vec(1, 0)),
+      normalMove(new Vec(1, 1)),
+      normalMove(new Vec(0, 1)),
+      normalMove(new Vec(-1, 1)),
+      normalMove(new Vec(-1, 0)),
+      normalMove(new Vec(-1, -1))
+    ]);
   }
 }
 
-function* downSlide() {
-  for (let y = 1; y < 8; ++y) {
-    yield { x: 0, y: y };
+export class WhiteQueen extends Piece {
+  constructor() {
+    super(PieceChar.WhiteQueen, [
+      slideMove(new Vec(0, -1)),
+      slideMove(new Vec(1, -1)),
+      slideMove(new Vec(1, 0)),
+      slideMove(new Vec(1, 1)),
+      slideMove(new Vec(0, 1)),
+      slideMove(new Vec(-1, 1)),
+      slideMove(new Vec(-1, 0)),
+      slideMove(new Vec(-1, -1))
+    ])
   }
 }
 
-function* downLeftSlide() {
-  for (let vec = { x: -1, y: 1 }; vec.y < 8; --vec.x, ++vec.y) {
-    yield vec;
+export class WhiteRook extends Piece {
+  constructor() {
+    super(PieceChar.WhiteRook, [
+      slideMove(new Vec(0, -1)),
+      slideMove(new Vec(1, 0)),
+      slideMove(new Vec(0, 1)),
+      slideMove(new Vec(-1, 0)),
+    ])
   }
 }
 
-function* leftSlide() {
-  for (let x = -1; x > -8; --x) {
-    yield { x: x, y: 0 };
+export class WhiteBishop extends Piece {
+  constructor() {
+    super(PieceChar.WhiteBishop, [
+      slideMove(new Vec(1, -1)),
+      slideMove(new Vec(1, 1)),
+      slideMove(new Vec(-1, 1)),
+      slideMove(new Vec(-1, -1)),
+    ])
   }
 }
 
-function* upLeftSlide() {
-  for (let vec = { x: -1, y: -1 }; vec.x > -8; --vec.x, --vec.y) {
-    yield vec;
+export class WhiteKnight extends Piece {
+  constructor() {
+    super(PieceChar.WhiteKnight, [
+      normalMove(new Vec(1, -2)),
+      normalMove(new Vec(2, -1)),
+      normalMove(new Vec(2, 1)),
+      normalMove(new Vec(1, 2)),
+      normalMove(new Vec(-1, 2)),
+      normalMove(new Vec(-2, 1)),
+      normalMove(new Vec(-2, -1)),
+      normalMove(new Vec(-1, -2)),
+    ])
+  }
+}
+
+export class WhitePawn extends Piece {
+  constructor() {
+    super(PieceChar.WhitePawn, [
+      function*(start: Vec, board: Board, piece: Piece) {
+        for (let i = 0; i < 2; ++i) {
+          const dest = start.add(new Vec(0, 1 + i));
+          if (!dest.inBounds()) return;
+
+          const destSqr = board.getSquareAtVec(dest);
+          if (destSqr.piece) return;
+
+          destSqr.decoration = board.active ? 'dot' : undefined;
+          yield;
+          if (piece.moved) return;
+        }
+      },
+
+      pieceMove(new Vec(1, 1)),
+      pieceMove(new Vec(-1, 1)),
+    ]);
+  }
+}
+
+export class BlackKing extends Piece {
+  constructor() {
+    super(PieceChar.BlackKing, [
+      normalMove(new Vec(0, -1)),
+      normalMove(new Vec(1, -1)),
+      normalMove(new Vec(1, 0)),
+      normalMove(new Vec(1, 1)),
+      normalMove(new Vec(0, 1)),
+      normalMove(new Vec(-1, 1)),
+      normalMove(new Vec(-1, 0)),
+      normalMove(new Vec(-1, -1))
+    ]);
+  }
+}
+
+export class BlackQueen extends Piece {
+  constructor() {
+    super(PieceChar.BlackQueen, [
+      slideMove(new Vec(0, -1)),
+      slideMove(new Vec(1, -1)),
+      slideMove(new Vec(1, 0)),
+      slideMove(new Vec(1, 1)),
+      slideMove(new Vec(0, 1)),
+      slideMove(new Vec(-1, 1)),
+      slideMove(new Vec(-1, 0)),
+      slideMove(new Vec(-1, -1))
+    ])
+  }
+}
+
+export class BlackRook extends Piece {
+  constructor() {
+    super(PieceChar.BlackRook, [
+      slideMove(new Vec(0, -1)),
+      slideMove(new Vec(1, 0)),
+      slideMove(new Vec(0, 1)),
+      slideMove(new Vec(-1, 0)),
+    ])
+  }
+}
+
+export class BlackBishop extends Piece {
+  constructor() {
+    super(PieceChar.BlackBishop, [
+      slideMove(new Vec(1, -1)),
+      slideMove(new Vec(1, 1)),
+      slideMove(new Vec(-1, 1)),
+      slideMove(new Vec(-1, -1)),
+    ])
+  }
+}
+
+export class BlackKnight extends Piece {
+  constructor() {
+    super(PieceChar.BlackKnight, [
+      normalMove(new Vec(1, -2)),
+      normalMove(new Vec(2, -1)),
+      normalMove(new Vec(2, 1)),
+      normalMove(new Vec(1, 2)),
+      normalMove(new Vec(-1, 2)),
+      normalMove(new Vec(-2, 1)),
+      normalMove(new Vec(-2, -1)),
+      normalMove(new Vec(-1, -2)),
+    ])
+  }
+}
+
+export class BlackPawn extends Piece {
+  constructor() {
+    super(PieceChar.BlackPawn, [
+      function*(start: Vec, board: Board, piece: Piece) {
+        for (let i = 0; i < 2; ++i) {
+          const dest = start.add(new Vec(0, -1 - i));
+          if (!dest.inBounds()) return;
+          const destSqr = board.getSquareAtVec(dest);
+          if (destSqr.piece) return;
+          destSqr.decoration = board.active ? 'dot' : undefined;
+
+          yield;
+          if (piece.moved) return;
+        }
+      },
+
+      pieceMove(new Vec(1, -1)),
+      pieceMove(new Vec(-1, -1)),
+    ]);
   }
 }

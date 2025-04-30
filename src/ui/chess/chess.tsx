@@ -1,21 +1,39 @@
 'use client';
 
 import { Box, Grid } from "@mui/material";
-import { useState } from "react";
-import { Board, Square, starting, Vec } from "./board";
+import { Dispatch, SetStateAction, useState } from "react";
+import { Board, Square, Vec } from "./board";
+
+class ActiveSquare {
+  private _sqr: Square | undefined;
+  private _setSqr: Dispatch<SetStateAction<Square | undefined>>;
+
+  constructor() {
+    [this._sqr, this._setSqr] = useState<Square>();
+  }
+
+  get sqr() {
+    return this._sqr;
+  }
+
+  reset() {
+    this._setSqr(undefined);
+  }
+
+  update(sqr: Square) {
+    this._setSqr(sqr);
+  }
+}
 
 export default function Chess() {
-  const [board, setBoard] = useState<Board>(starting);
-
-  const [active, setActive] = useState<
-    { sqr: Square } & Vec | null
-  >(null);
+  const [board, setBoard] = useState<Board>(new Board());
+  const activeSqr = new ActiveSquare();
 
   return (
     <Grid container justifyContent="center">
       <Grid container>
         <Box>
-          {board.map((row, i) => (
+          {board.squares.map((row, i) => (
             <Grid key={i} container flexWrap="nowrap">
               {row.map((square, j) => (
                 <Grid
@@ -37,61 +55,12 @@ export default function Chess() {
                   }}
 
                   onClick={() => {
-                    const decorate = (
-                      vecSqr: { sqr: Square } & Vec,
-                      remove?: true
-                    ) => {
-                      vecSqr.sqr.piece!.moves.forEach(move => {
-                        for (const m of move()) {
-                          const x = vecSqr.x + m.x;
-                          const y = vecSqr.y + m.y;
-                    
-                          if (x < 0 || y < 0 || x > 7 || y > 7) {
-                            return;
-                          }
-                    
-                          const dest = board[y][x];
+                    board.handleClick({
+                      sqr: square,
+                      vec: new Vec(j, i)
+                    });
 
-                          if (dest.piece) {
-                            dest.decoration = remove ? undefined : 'circle';
-                            return;
-                          }
-
-                          dest.decoration = remove ? undefined: 'dot';
-                        }
-                      });
-
-                      setBoard([...board]);
-                    };
-
-                    const capture = (active: { sqr: Square } & Vec) => {
-                      console.log('yo');
-                      decorate(active, true);
-                      square.decoration = undefined;
-                      square.piece = active.sqr.piece;
-                      active.sqr.piece = undefined;
-                      setActive(null);
-                    }
-
-                    if (square.piece) {
-                      // if the square has a piece and a decoration,
-                      // it is a circle
-                      if (square.decoration) {
-                        capture(active!);
-                        return;
-                      }
-                      
-                      if (active) return;
-                      setActive({ sqr: square, x: j, y: i });
-                      decorate({ sqr: square, x: j, y: i });
-                      return;
-                    }
-                
-                    // If clicked on square with no piece and no decoration, an
-                    // empty square was clicked and nothing should be done
-                    if (!square.decoration) return;
-                    // no piece, yes decoration
-                    capture(active!);
+                    setBoard(new Board(board));
                   }}
                 >
                   {square.decoration === 'dot' ? (
