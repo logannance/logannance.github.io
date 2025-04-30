@@ -1,33 +1,11 @@
 'use client';
 
 import { Box, Grid } from "@mui/material";
-import { Dispatch, SetStateAction, useState } from "react";
-import { Board, Square, Vec } from "./board";
-
-class ActiveSquare {
-  private _sqr: Square | undefined;
-  private _setSqr: Dispatch<SetStateAction<Square | undefined>>;
-
-  constructor() {
-    [this._sqr, this._setSqr] = useState<Square>();
-  }
-
-  get sqr() {
-    return this._sqr;
-  }
-
-  reset() {
-    this._setSqr(undefined);
-  }
-
-  update(sqr: Square) {
-    this._setSqr(sqr);
-  }
-}
+import { useState } from "react";
+import { Board, Vec } from "./board";
 
 export default function Chess() {
   const [board, setBoard] = useState<Board>(new Board());
-  const activeSqr = new ActiveSquare();
 
   return (
     <Grid container justifyContent="center">
