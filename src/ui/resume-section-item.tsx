@@ -48,7 +48,7 @@ export default function ResumeSectionItem({
         )}
         {optionalItem}
         {descriptions && descriptions.map((description, i) => (
-            <Typography key={i} variant="body2">{description}</Typography>
+          <Typography key={i} variant="body2">{description}</Typography>
         ))}
       </ListItemText>
     </ListItem>

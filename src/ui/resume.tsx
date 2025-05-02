@@ -6,8 +6,8 @@ import ResumeSectionItem from "./resume-section-item";
 
 export default function Resume() {
   return (
-    <Grid container spacing={1} width="100%">
-      <Grid size={{xs: 12, sm: 6, md: 4}}>
+    <Grid container justifyContent="space-around">
+      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
         <ResumeSection title="Education">
           <ResumeSectionItem
             title="Bachelor's Degree"
@@ -20,38 +20,38 @@ export default function Resume() {
             descriptions={["Outstanding Student Award",
               "High Academic Excellence"
             ]}
-          optionalItem={
-            <IconText icon={<SchoolIcon fontSize="small" />} text="4.0 GPA" />
-          }
-        />
-        <ResumeSectionItem
-          title="High School Diploma"
-          subtitle="Viewmont High School"
-          date="2017 - 2020"
-          location="Bountiful, UT"
-          locationHref="https://www.google.com/maps/place/Bountiful,+UT/@40.8977778,-111.8774972,13z/data=!3m1!4b1!4m6!3m5!1s0x874d9823f0835733:0x387840e06759776!8m2!3d40.8798851!4d-111.8764416!16zL20vMDEwZHQw?entry=ttu&g_ep=EgoyMDI0MTIxMS4wIKXMDSoASAFQAw%3D%3D"
-          organization="Viewmont High School"
-          organizationHref="https://davis.k12.ut.us/viewmont"
-          descriptions={[
-            "Captain of varsity soccer team",
-            "Excellence in Mathematics, Citizenship, and Fitness"
-          ]}
-        />
-        <ResumeSectionItem
-          title="Additional Skills"
-          descriptions={[
-            "C++",
-            "SQL",
-            "Git",
-            "Cursor",
-            "JavaScript",
-            "Microsoft Excel (VBA)",
-            "Finance"
-          ]}
-        />
+            optionalItem={
+              <IconText icon={<SchoolIcon fontSize="small" />} text="4.0 GPA" />
+            }
+          />
+          <ResumeSectionItem
+            title="High School Diploma"
+            subtitle="Viewmont High School"
+            date="2017 - 2020"
+            location="Bountiful, UT"
+            locationHref="https://www.google.com/maps/place/Bountiful,+UT/@40.8977778,-111.8774972,13z/data=!3m1!4b1!4m6!3m5!1s0x874d9823f0835733:0x387840e06759776!8m2!3d40.8798851!4d-111.8764416!16zL20vMDEwZHQw?entry=ttu&g_ep=EgoyMDI0MTIxMS4wIKXMDSoASAFQAw%3D%3D"
+            organization="Viewmont High School"
+            organizationHref="https://davis.k12.ut.us/viewmont"
+            descriptions={[
+              "Captain of varsity soccer team",
+              "Excellence in Mathematics, Citizenship, and Fitness"
+            ]}
+          />
+          <ResumeSectionItem
+            title="Additional Skills"
+            descriptions={[
+              "C++",
+              "SQL",
+              "Git",
+              "Cursor",
+              "JavaScript",
+              "Microsoft Excel (VBA)",
+              "Finance"
+            ]}
+          />
         </ResumeSection>
       </Grid>
-      <Grid size={{xs: 12, sm: 6, md: 4}}>
+      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
         <ResumeSection title="Work Experience">
           <ResumeSectionItem
             title="Parks Maintenance Worker"

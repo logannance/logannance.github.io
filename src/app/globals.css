@@ -25,6 +25,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
-  min-width: 100vw;
-  position: absolute;
+  min-width: fit-content;
+  position: static;
 }
