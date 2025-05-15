@@ -87,6 +87,7 @@ type VecSquare = {
 export class Board {
   private _squares: Square[][];
   private _active: VecSquare | undefined;
+  private _turn: 'white' | 'black' = 'white';
 
   constructor();
   constructor(other: Board);
@@ -171,7 +172,7 @@ export class Board {
     sqr.piece = undefined;
   }
 
-  handleClick({ sqr, vec }: VecSquare) {
+  handleClick({ sqr, vec }: VecSquare) { 
     if (sqr.decoration) {
       this.move(sqr);
       return;

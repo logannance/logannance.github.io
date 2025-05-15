@@ -52,14 +52,14 @@ export default function RootLayout({
                       Resume
                     </Button>
                     <Button variant="text" color="inherit" LinkComponent={Link}
+                      href="https://loen10.itch.io/circleo" target="_blank"
+                    >
+                      Circleo
+                    </Button>
+                    <Button variant="text" color="inherit" LinkComponent={Link}
                       href="/chess"
                     >
                       Chess
-                    </Button>
-                    <Button variant="text" color="inherit" LinkComponent={Link}
-                      href="/numeral-conversion"
-                    >
-                      Numeral Conversion
                     </Button>
                   </Toolbar>
                 </AppBar>

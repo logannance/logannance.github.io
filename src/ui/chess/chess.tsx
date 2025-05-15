@@ -1,9 +1,8 @@
 'use client';
 
-import { Box, Grid, Stack, Typography } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { useState } from "react";
 import { Board, Vec } from "./board";
-import VersionList from "./version-list";
 
 export default function Chess() {
   const [board, setBoard] = useState<Board>(new Board());
@@ -66,9 +65,5 @@ export default function Chess() {
         ))}
       </Box>
     </Grid>
-    <Stack padding={1}>
-      <Typography variant="h1">Info</Typography>
-      <VersionList />
-    </Stack>
   </>
 }
